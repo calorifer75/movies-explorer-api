@@ -7,6 +7,12 @@ const mongoose = require('mongoose');
 // создание приложения express
 const app = express();
 
+// подключение распознавания JSON в теле запроса
+app.use(express.json());
+
+// подключение распознавания строк и массивов в теле запроса
+app.use(express.urlencoded({ extended: true }));
+
 // подключение к базе данных
 mongoose
   .connect('mongodb://localhost:27017/bitfilmsdb', {
