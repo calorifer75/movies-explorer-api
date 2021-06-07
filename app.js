@@ -62,6 +62,9 @@ app.post(
 // аутентификация
 app.use(require('./middlewares/auth'));
 
+// роуты
+app.use('/users', require('./routes/users'));
+
 // обработка ошибки 404
 app.use((req, res, next) => next(new NotFoundError('Ошибка 404. Страница не найдена')));
 

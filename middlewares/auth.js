@@ -11,10 +11,10 @@ module.exports = (req, res, next) => {
 
   const token = authorization.replace('Bearer ', '');
   const { NODE_ENV, JWT_SECRET } = process.env;
-  let userId;
+  let payload;
 
   try {
-    userId = jwt.verify(
+    payload = jwt.verify(
       token,
       NODE_ENV === 'production' ? JWT_SECRET : 'very-strong-secret',
     );
@@ -23,6 +23,6 @@ module.exports = (req, res, next) => {
     return;
   }
 
-  req.user = userId;
+  req.user = payload;
   next();
 };
