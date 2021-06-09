@@ -19,7 +19,7 @@ const movieSchema = new mongoose.Schema({
     type: Number,
     validate: {
       validator(v) {
-        return (v >= 0 && v <= 9999);
+        return (v >= 1900 && v <= 9999);
       },
       message: (props) => `${props.value} is not a valid year!`,
     },
