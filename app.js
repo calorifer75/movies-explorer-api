@@ -1,6 +1,9 @@
 // подключение фреймворка express
 const express = require('express');
 
+// подключение безопасника helmet
+const helmet = require('helmet');
+
 // подключение валидатора Joi
 const { celebrate, Joi, errors: celebrateErrors } = require('celebrate');
 
@@ -26,6 +29,9 @@ require('dotenv').config();
 
 // создание приложения express
 const app = express();
+
+// использование безопасника helmet
+app.use(helmet());
 
 // использование распознавания JSON в теле запроса
 app.use(express.json());
