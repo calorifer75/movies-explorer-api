@@ -7,20 +7,37 @@ const { celebrate, Joi, errors: celebrateErrors } = require('celebrate');
 // подключение ORM mongoose
 const mongoose = require('mongoose');
 
+// подключение CORS
+const cors = require('cors');
+
 // подключение классов ошибок
 const NotFoundError = require('./errors/not-found-err');
 
 // подключение методов из контроллера users
 const { createUser, login } = require('./controllers/users');
 
+// подключение логгеров
+const { requestLogger, errorLogger } = require('./middlewares/logger');
+
+// подключение файла .env
+require('dotenv').config();
+
+// ////////////////////////////////////////////////////////////////////
+
 // создание приложения express
 const app = express();
 
-// подключение распознавания JSON в теле запроса
+// использование распознавания JSON в теле запроса
 app.use(express.json());
 
-// подключение распознавания строк и массивов в теле запроса
+// использование распознавания строк и массивов в теле запроса
 app.use(express.urlencoded({ extended: true }));
+
+// использование CORS
+app.use(cors());
+
+// использование логгера запросов
+app.use(requestLogger);
 
 // подключение к базе данных
 mongoose
@@ -68,6 +85,9 @@ app.use('/movies', require('./routes/movies'));
 
 // обработка ошибки 404
 app.use((req, res, next) => next(new NotFoundError('Ошибка 404. Страница не найдена')));
+
+// использование логгера ошибок
+app.use(errorLogger);
 
 // обработка ошибок celebrate
 app.use(celebrateErrors());
