@@ -19,6 +19,9 @@ const { requestLogger, errorLogger } = require('./middlewares/logger');
 // подключение файла .env
 require('dotenv').config();
 
+// подключение config
+const config = require('./config/config');
+
 // ////////////////////////////////////////////////////////////////////
 
 // создание приложения express
@@ -44,7 +47,7 @@ app.use(requestLogger);
 const { NODE_ENV, MONGO_BASE } = process.env;
 const database = NODE_ENV === 'production'
   ? MONGO_BASE
-  : 'mongodb://localhost:27017/bitfilmsdb';
+  : config.MONGO_BASE;
 mongoose
   .connect(database, {
     useNewUrlParser: true,
