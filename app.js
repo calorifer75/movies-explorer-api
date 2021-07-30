@@ -13,8 +13,8 @@ const mongoose = require('mongoose');
 // подключение CORS
 const cors = require('cors');
 
-// подключение классов ошибок
-const NotFoundError = require('./errors/not-found-err');
+// // подключение классов ошибок
+// const NotFoundError = require('./errors/not-found-err');
 
 // подключение логгеров
 const { requestLogger, errorLogger } = require('./middlewares/logger');
@@ -57,8 +57,8 @@ mongoose
 // роуты
 app.use(require('./routes/index'));
 
-// обработка ошибки 404
-app.use((req, res, next) => next(new NotFoundError('Ошибка 404. Страница не найдена')));
+// // обработка ошибки 404
+// app.use((req, res, next) => next(new NotFoundError('Ошибка 404. Страница не найдена')));
 
 // использование логгера ошибок
 app.use(errorLogger);
