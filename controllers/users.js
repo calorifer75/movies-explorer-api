@@ -44,7 +44,7 @@ module.exports.login = async (req, res, next) => {
       { expiresIn: '7d' },
     );
 
-    res.send(token);
+    res.send({ token });
   } catch (error) {
     next(error);
   }
