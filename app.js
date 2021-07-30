@@ -5,7 +5,7 @@ const express = require('express');
 const helmet = require('helmet');
 
 // подключение валидатора Joi
-const { celebrate, Joi, errors: celebrateErrors } = require('celebrate');
+const { errors: celebrateErrors } = require('celebrate');
 
 // подключение ORM mongoose
 const mongoose = require('mongoose');
@@ -15,9 +15,6 @@ const cors = require('cors');
 
 // подключение классов ошибок
 const NotFoundError = require('./errors/not-found-err');
-
-// подключение методов из контроллера users
-const { createUser, login } = require('./controllers/users');
 
 // подключение логгеров
 const { requestLogger, errorLogger } = require('./middlewares/logger');
@@ -57,37 +54,8 @@ mongoose
     throw new Error(err);
   });
 
-// создание нового пользователя
-app.post(
-  '/signup',
-  celebrate({
-    body: Joi.object().keys({
-      email: Joi.string().required().email(),
-      password: Joi.string().required().min(8),
-      name: Joi.string().min(2).max(30),
-    }),
-  }),
-  createUser,
-);
-
-// логин
-app.post(
-  '/signin',
-  celebrate({
-    body: Joi.object().keys({
-      email: Joi.string().required().email(),
-      password: Joi.string().required().min(8),
-    }),
-  }),
-  login,
-);
-
-// аутентификация
-app.use(require('./middlewares/auth'));
-
 // роуты
-app.use('/users', require('./routes/users'));
-app.use('/movies', require('./routes/movies'));
+app.use(require('./routes/index'));
 
 // обработка ошибки 404
 app.use((req, res, next) => next(new NotFoundError('Ошибка 404. Страница не найдена')));
