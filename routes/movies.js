@@ -28,7 +28,7 @@ router.post(
           if (validator.isURL(value, { require_protocol: true })) return value;
           throw new Error('image is not valid URL');
         }),
-      movieId: Joi.string().length(24).hex().required(),
+      movieId: Joi.number().required(),
       nameRU: Joi.string().required(),
       nameEN: Joi.string().required(),
     }),
