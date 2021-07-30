@@ -13,9 +13,6 @@ const mongoose = require('mongoose');
 // подключение CORS
 const cors = require('cors');
 
-// // подключение классов ошибок
-// const NotFoundError = require('./errors/not-found-err');
-
 // подключение логгеров
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 
@@ -43,8 +40,12 @@ app.use(cors());
 app.use(requestLogger);
 
 // подключение к базе данных
+const { NODE_ENV, MONGO_BASE } = process.env;
+const database = NODE_ENV === 'production'
+  ? MONGO_BASE
+  : 'mongodb://localhost:27017/bitfilmsdb';
 mongoose
-  .connect('mongodb://localhost:27017/bitfilmsdb', {
+  .connect(database, {
     useNewUrlParser: true,
     useCreateIndex: true,
     useFindAndModify: false,
@@ -56,9 +57,6 @@ mongoose
 
 // роуты
 app.use(require('./routes/index'));
-
-// // обработка ошибки 404
-// app.use((req, res, next) => next(new NotFoundError('Ошибка 404. Страница не найдена')));
 
 // использование логгера ошибок
 app.use(errorLogger);
