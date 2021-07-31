@@ -66,7 +66,6 @@ module.exports.deleteMovie = async (req, res, next) => {
       next(
         new CastError(constants.castErrorMsg + error.message),
       );
-    }
-    next(error);
+    } else next(error);
   }
 };
