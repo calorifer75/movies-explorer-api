@@ -35,6 +35,7 @@
     "helmet": "^4.6.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.12.12",
+    "node-rate-limiter": "^1.0.1",
     "validator": "^13.6.0",
     "winston": "^3.3.3"
   }

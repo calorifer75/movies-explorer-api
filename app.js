@@ -19,7 +19,7 @@ const { requestLogger, errorLogger } = require('./middlewares/logger');
 // подключение файла .env
 require('dotenv').config();
 
-// подключение config
+// подключение всего остального
 const config = require('./config/config');
 const constants = require('./config/constants');
 
@@ -59,6 +59,9 @@ mongoose
   .catch((err) => {
     throw new Error(err);
   });
+
+// rate limiter
+app.use(require('./middlewares/rate-limiter'));
 
 // роуты
 app.use(require('./routes/index'));
