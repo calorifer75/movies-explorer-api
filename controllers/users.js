@@ -4,6 +4,7 @@ const User = require('../models/user');
 const UniqueValueError = require('../errors/unique-value-err');
 const NotFoundError = require('../errors/not-found-err');
 const LoginError = require('../errors/login-err');
+const constants = require('../config/constants');
 
 // создание нового пользователя
 module.exports.createUser = async (req, res, next) => {
@@ -18,7 +19,7 @@ module.exports.createUser = async (req, res, next) => {
     res.send(jsonUser);
   } catch (error) {
     if (error.name === 'MongoError' && error.code === 11000) {
-      next(new UniqueValueError('Ошибка! Пользователь с таким email уже есть'));
+      next(new UniqueValueError(constants.uniqueValueErrorMsg));
     } else {
       next(error);
     }
@@ -28,7 +29,7 @@ module.exports.createUser = async (req, res, next) => {
 // логин
 module.exports.login = async (req, res, next) => {
   const { email, password } = req.body;
-  const loginError = new LoginError('Ошибка! Неправильные почта и пароль');
+  const loginError = new LoginError(constants.loginErrorMsg);
 
   try {
     const user = await User.findOne({ email }).select('+password');
@@ -56,7 +57,7 @@ module.exports.getUserInfo = async (req, res, next) => {
     const user = await User
       .findById(req.user._id)
       .orFail(
-        new NotFoundError('Ошибка! Нет пользователя с таким id'),
+        new NotFoundError(constants.notFoundErrorMsg),
       );
 
     res.send(user.toJSON());
@@ -77,13 +78,13 @@ module.exports.setUserInfo = async (req, res, next) => {
         { runValidators: true, new: true },
       )
       .orFail(
-        new NotFoundError('Ошибка! Нет пользователя с таким id'),
+        new NotFoundError(constants.notFoundErrorMsg),
       );
 
     res.send(user.toJSON());
   } catch (error) {
     if (error.name === 'MongoError' && error.code === 11000) {
-      next(new UniqueValueError('Ошибка! Пользователь с таким email уже есть'));
+      next(new UniqueValueError(constants.uniqueValueErrorMsg));
     } else {
       next(error);
     }

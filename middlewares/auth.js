@@ -1,10 +1,11 @@
 const jwt = require('jsonwebtoken');
 const LoginError = require('../errors/login-err');
 const config = require('../config/config');
+const constants = require('../config/constants');
 
 module.exports = (req, res, next) => {
   const { authorization } = req.headers;
-  const loginError = new LoginError('Ошибка! Необходима авторизация');
+  const loginError = new LoginError(constants.loginErrorMsg);
 
   if (!authorization || !authorization.startsWith('Bearer ')) {
     throw loginError;

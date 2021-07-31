@@ -2,6 +2,7 @@ const Movie = require('../models/movie');
 const NotFoundError = require('../errors/not-found-err');
 const AccessViolationError = require('../errors/not-found-err');
 const CastError = require('../errors/cast-err');
+const constants = require('../config/constants');
 
 // создание нового фильма
 module.exports.createMovie = async (req, res, next) => {
@@ -50,20 +51,20 @@ module.exports.deleteMovie = async (req, res, next) => {
 
   try {
     const movie = await Movie.findById(movieId).orFail(
-      new NotFoundError('Ошибка! Нет фильма с таким id'),
+      new NotFoundError(constants.notFoundErrorMsg),
     );
 
     if (String(movie.owner) !== req.user._id) {
-      throw new AccessViolationError('Ошибка! У вас нет прав на удаление этого фильма');
+      throw new AccessViolationError(constants.accessViolationErrorMsg);
     }
 
     res.send(await Movie.findByIdAndRemove(movieId).orFail(
-      new NotFoundError('Ошибка! Нет фильма с таким id'),
+      new NotFoundError(constants.notFoundErrorMsg),
     ));
   } catch (error) {
     if (error.name === 'CastError') {
       next(
-        new CastError(`Ошибка преобразования типов: ${error.message}`),
+        new CastError(constants.castErrorMsg + error.message),
       );
     }
     next(error);

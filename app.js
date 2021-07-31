@@ -21,6 +21,7 @@ require('dotenv').config();
 
 // подключение config
 const config = require('./config/config');
+const constants = require('./config/constants');
 
 // ////////////////////////////////////////////////////////////////////
 
@@ -76,7 +77,7 @@ app.use((err, req, res, next) => {
     .status(statusCode)
     .send({
       message: statusCode === 500
-        ? `На сервере произошла ошибка: ${message}`
+        ? constants.internalServerErrorMsg + message
         : message,
     });
 
